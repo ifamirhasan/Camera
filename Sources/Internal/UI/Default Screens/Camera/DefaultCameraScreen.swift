@@ -17,8 +17,14 @@ public struct DefaultCameraScreen: MCameraScreen {
     public let closeMCameraAction: () -> ()
     var config: Config = .init()
 
+    @State private var shouldUpdate = false
+    
+    private let captureSessionDidStartRunning = NotificationCenter.default.publisher(for: .AVCaptureSessionDidStartRunning)
 
     public var body: some View {
+        if shouldUpdate {
+            EmptyView()
+        }
         ZStack {
             createContentView()
             createTopBar()
@@ -29,6 +35,9 @@ public struct DefaultCameraScreen: MCameraScreen {
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
         .animation(.mSpring)
+        .onReceive(captureSessionDidStartRunning) { _ in
+            shouldUpdate.toggle()
+        }
     }
 }
 private extension DefaultCameraScreen {
