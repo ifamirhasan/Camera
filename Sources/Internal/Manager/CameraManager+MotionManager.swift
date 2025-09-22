@@ -21,8 +21,10 @@ import AVKit
 extension CameraManagerMotionManager {
     func setup(parent: CameraManager) {
         self.parent = parent
-        manager.accelerometerUpdateInterval = 0.05
-        manager.startAccelerometerUpdates(to: .current ?? .init(), withHandler: handleAccelerometerUpdates)
+        if parent.attributes.isOrientationEnabled {        
+            manager.accelerometerUpdateInterval = 0.05
+            manager.startAccelerometerUpdates(to: .current ?? .init(), withHandler: handleAccelerometerUpdates)
+        }
     }
 }
 private extension CameraManagerMotionManager {
